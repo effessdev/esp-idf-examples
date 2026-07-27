@@ -54,3 +54,19 @@ KERNEL=="ttyUSB*", MODE="0666"
 KERNEL=="ttyACM*", MODE="0666"
 ```
 -->
+
+## How do I create a new example?
+
+- From the command palette, select `ESP-IDF: New Project` and select the ESP-IDF version.
+- From the "ESP-IDF Templates" dropdown, select the `sample_project` template and click the create project button.
+- Fill in the details:
+  - Project name: Your project name.
+  - Project directory: Your project directory.
+  - ESP-IDF target: esp32.
+  - ESP-IDF board: Custom board.
+  - Serial port: Detect.
+  - OpenOCD configuration files: Keep the default value.
+  - ESP-IDF component directory: Keep the input empty.
+- Create project.
+- Open project.
+- Write your code and submit a pull request.
