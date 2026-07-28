@@ -2,6 +2,8 @@
 
 This is a set of ESP-IDF examples to help you learn to program an ESP32.
 
+> **Note:** Some examples are AI-generated. However, every single one has been manually verified, tested, and refined.
+
 ## How do I run these examples in my ESP32?
 
 ### 1. Install the necessary dependencies
