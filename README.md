@@ -71,4 +71,5 @@ KERNEL=="ttyACM*", MODE="0666"
   - ESP-IDF component directory: Keep the input empty.
 - Create project.
 - Open project.
+- Generate compile commands if prompted.
 - Write your code and submit a pull request.
