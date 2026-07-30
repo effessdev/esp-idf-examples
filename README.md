@@ -27,6 +27,8 @@ Open the command palette (`Ctrl + Shift + P`) and select
 ESP-IDF: Flash Your Project
 ```
 
+Choose `UART` if prompted.
+
 #### A Note for Windows users (skip this if you use Linux)
 
 If you are on Windows, flashing might show this error:
