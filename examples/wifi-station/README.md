@@ -1,44 +1,25 @@
-| Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C5 | ESP32-C6 | ESP32-C61 | ESP32-H2 | ESP32-P4 | ESP32-S2 | ESP32-S3 |
-| ----------------- | ----- | -------- | -------- | -------- | -------- | --------- | -------- | -------- | -------- | -------- |
+# Wi-Fi Station
 
-# Wi-Fi Station Example
+## Before building
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+Open the project configuration menu. This can be done by
 
-This example shows how to use the Wi-Fi Station functionality of the Wi-Fi driver of ESP for connecting to an Access Point.
+1. Running `ESP-IDF: SDK Configuration Editor (Menuconfig)` from the VS Code command palette (recommended) or
+2. Running the command `idf.py menuconfig` from the terminal
 
-## How to use example
+In the configuration menu:
 
-### Configure the project
-
-Open the project configuration menu (`idf.py menuconfig` or `ESP-IDF: SDK Configuration Editor (Menuconfig)` from the command palette if you are using VS Code).
-
-In the `Example Configuration` menu:
-
-* Set the Wi-Fi configuration.
-    * Set `WiFi SSID`.
-    * Set `WiFi Password`.
+- Set `WiFi SSID`
+- Set `WiFi Password`
 
 Optional: If you need, change the other options according to your requirements.
 
-### Build and Flash
-
-Build the project and flash it to the board, then run the monitor tool to view the serial output:
-
-Run `idf.py -p PORT flash monitor` to build, flash and monitor the project.
-
-(To exit the serial monitor, type ``Ctrl-]``.)
-
-See the Getting Started Guide for all the steps to configure and use the ESP-IDF to build projects.
-
-* [ESP-IDF Getting Started Guide on ESP32](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html)
-* [ESP-IDF Getting Started Guide on ESP32-S2](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/get-started/index.html)
-* [ESP-IDF Getting Started Guide on ESP32-C3](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/get-started/index.html)
-
 ## Example Output
+
 Note that the output, in particular the order of the output, may vary depending on the environment.
 
 Console output if station connects to AP successfully:
+
 ```
 I (589) wifi station: ESP_WIFI_MODE_STA
 I (599) wifi: wifi driver task: 3ffc08b4, prio:23, stack:3584, core=0
@@ -72,6 +53,7 @@ I (2089) wifi station: connected to ap SSID:myssid password:mypassword
 ```
 
 Console output if the station failed to connect to AP:
+
 ```
 I (589) wifi station: ESP_WIFI_MODE_STA
 I (599) wifi: wifi driver task: 3ffc08b4, prio:23, stack:3584, core=0
@@ -116,10 +98,15 @@ I (10299) wifi station: connect to the AP fail
 I (10299) wifi station: Failed to connect to SSID:myssid, password:mypassword
 ```
 
-## Running the example on ESP Chips without Wi-Fi
+## Supported targets
 
-This example can run on ESP Chips without Wi-Fi using ESP-Hosted. See the [Two-Chip Solution](../../README.md#wi-fi-examples-with-two-chip-solution) section in the upper level `README.md` for information.
-
-## Troubleshooting
-
-For any technical queries, please open an [issue](https://github.com/espressif/esp-idf/issues) on GitHub. We will get back to you soon.
+- ESP32
+- ESP32-C2
+- ESP32-C3
+- ESP32-C5
+- ESP32-C6
+- ESP32-C61
+- ESP32-H2
+- ESP32-P4
+- ESP32-S2
+- ESP32-S3
