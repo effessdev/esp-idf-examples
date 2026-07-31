@@ -100,6 +100,24 @@ I (10299) wifi station: connect to the AP fail
 I (10299) wifi station: Failed to connect to SSID:myssid, password:mypassword
 ```
 
+
+## `idf_component.yml`
+
+- Declares component dependencies and metadata.
+- Used by the ESP-IDF Component Manager.
+- Specifies which external components (and versions) to download.
+- The resolved versions are recorded in `dependencies.lock`.
+
+## How configurations are stored
+
+- `sdkconfig` stores the current configuration. Not commited to version control.
+- If `sdkconfig` was not found and it is required, it is created from `sdkconfig.defaults` (plus ESP-IDF defaults).
+- We don't edit `sdkconfig` directly:
+  - We use Menuconfig to edit `sdkconfig`.
+  - Menuconfig can be launched using VS Code command palette (`ESP-IDF: SDK Configuration Editor (Menuconfig)`).
+  - Menuconfig provides a graphical method to edit `sdkconfig`.
+  - `Kconfig.projbuild` contains definitions, examples, etc. for the configuration options that are shown in Menuconfig so that it's easier for us to edit.
+
 ## Supported targets
 
 - ESP32
