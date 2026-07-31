@@ -12,7 +12,9 @@ In the configuration menu:
 - Set `WiFi SSID`
 - Set `WiFi Password`
 
-Optional: If you need, change the other options according to your requirements.
+The configuration is stored in `sdkconfig` file. The default configurations come from `sdkconfig.default` file.
+
+> Optional: If you need, change the other options according to your requirements.
 
 ## Example Output
 
