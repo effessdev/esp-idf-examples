@@ -1,5 +1,8 @@
 {
   "C_Cpp.intelliSenseEngine": "default",
+  "cmake.configureOnOpen": false,
+  "cmake.autoSelectActiveFolder": false,
+  "cmake.sourceDirectory": "",
   "idf.extensionActivationMode": "always",
   "idf.openOcdConfigs": ["board/esp32-wrover-kit-3.3v.cfg"],
   "idf.port": "/dev/ttyUSB0",
