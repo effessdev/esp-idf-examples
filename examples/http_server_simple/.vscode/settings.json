@@ -13,6 +13,6 @@
   "clangd.arguments": [
     "--background-index",
     "--query-driver=**",
-    "--compile-commands-dir=/home/faseeh/Temp/repos/esp-idf-examples/examples/http_server/build"
+    "--compile-commands-dir=/home/faseeh/Temp/repos/esp-idf-examples/examples/http_server_simple/build"
   ]
 }
