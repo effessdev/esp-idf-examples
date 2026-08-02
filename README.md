@@ -75,3 +75,14 @@ KERNEL=="ttyACM*", MODE="0666"
 - Open project.
 - Generate compile commands if prompted.
 - Write your code and submit a pull request.
+
+## Troubleshooting
+
+## Red squiggly lines under `#include "whatever"`
+
+Try this VS Code command from the command palette:
+
+```
+ESP-IDF: Add VS Code Configuration Folder
+```
+
