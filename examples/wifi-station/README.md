@@ -116,7 +116,7 @@ I (10299) wifi station: Failed to connect to SSID:myssid, password:mypassword
   - We use Menuconfig to edit `sdkconfig`.
   - Menuconfig can be launched using VS Code command palette (`ESP-IDF: SDK Configuration Editor (Menuconfig)`).
   - Menuconfig provides a graphical method to edit `sdkconfig`.
-  - `Kconfig.projbuild` contains definitions, examples, etc. for the configuration options that are shown in Menuconfig so that it's easier for us to edit.
+  - We can add more configuration options through `Kconfig.projbuild`.
 
 ## Supported targets
 
