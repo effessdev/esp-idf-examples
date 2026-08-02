@@ -1,55 +1,52 @@
+#include <stdio.h>
+
+#include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
-#include "driver/gpio.h"
 
-#define LED_GPIO GPIO_NUM_2 // LED already included in most ESP32 development boards
+#define LED_PIN GPIO_NUM_2
 
-bool ledIsOn = false;
-
-void my_task(void *pvParameter) // p stands for pointer and v stands for void. It means "pointer to void".
+void blink_task(void *pvParameters)
 {
-    char *task_name = (char *)pvParameter; // () is for type conversion
-    const char *TAG = "MY_TASK";
+    uint32_t interval = (uint32_t)pvParameters;
+
+    // Note: Actually, pvParameters is meant to be the pointer
+    // to the parameters.
+    // We are doing a trick to send an integer directly.
+    // We create an integer and tells the computer:
+    // "this is not an int, it's a pointer" buy converting it
+    // to a pointer (not to be confused with getting the pointer
+    // to that int).
+    // The bytes can be directly converted since both are a set of
+    // 32 bits (ESP32).
+    // Then we convert it back 😎
+
+    gpio_reset_pin(LED_PIN);
+    gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);
 
     while (1)
     {
-        if (ledIsOn)
-        {
-            ledIsOn = false;
-            gpio_set_level(LED_GPIO, 0);
-            ESP_LOGI(TAG, "LED is on");
-        }
-        else
-        {
-            ledIsOn = true;
-            gpio_set_level(LED_GPIO, 1);
-            ESP_LOGI(TAG, "LED is off");
-        }
-
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        gpio_set_level(LED_PIN, 1);
+        vTaskDelay(pdMS_TO_TICKS(interval));
+        gpio_set_level(LED_PIN, 0);
+        vTaskDelay(pdMS_TO_TICKS(interval));
     }
 }
 
 void app_main(void)
 {
-    // LED setup
-    gpio_reset_pin(LED_GPIO);
-    gpio_set_direction(LED_GPIO, GPIO_MODE_OUTPUT);
-    gpio_set_level(LED_GPIO, 0);
+    const char *TAG = "main_function";
 
-    char *param = "Task 1"; // Passed to my_task after converting to void*
+    ESP_LOGI(TAG, "Creating task...");
 
-    // Crate the task (just ignore the "x" prefix)
     xTaskCreate(
-        my_task,          // Task function
-        "CustomTaskName", // Can be anything (used for debugging, logging and error tracking)
-        2048,             // Stack size (amount of memory/RAM) allocated for the task, measured in bytes
-        (void *)param,    // Parameter sent to my_task
-        5,                // Task priority
-        NULL              // Task handle
-    );
+        blink_task,
+        "blink_task",
+        2048,
+        (void *)50,
+        5,
+        NULL);
 
-    // The "convert, then convert back" dance is necessary,
-    // because xTaskCreate only accepts a generic pointer (void *).
+    ESP_LOGI(TAG, "Task created.");
 }
