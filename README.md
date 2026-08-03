@@ -2,32 +2,20 @@
 
 This is a set of ESP-IDF examples to help you learn to program an ESP32.
 
-> **Note:** Most examples are AI-generated. However, every single one has been manually verified, tested, and refined. All examples use ESP-IDF v6.
+> **Note:** Some examples are AI-generated. However, every single one has been manually verified, tested, and refined. All examples use ESP-IDF v6.
 
-## How do I run these examples in my ESP32?
+## Running these examples in your ESP32
 
 ### 1. Install the necessary dependencies
 
 1. Install ESP-IDF (and the drivers if using Windows) using EIM ([official docs](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/index.html#installation)).
 2. Install the ESP-IDF VS Code extension by Espressif Systems.
 
-### 2. Build your project
+### 2. Configure, build & flash
 
-Open the command palette (`Ctrl + Shift + P`) and select
-
-```
-ESP-IDF: Build Your Project
-```
-
-### 3. Flash your project
-
-Open the command palette (`Ctrl + Shift + P`) and select
-
-```
-ESP-IDF: Flash Your Project
-```
-
-Choose `UART` if prompted.
+1. `Ctrl + Shift + P -> ESP-IDF: Run idf.py reconfigure Task`
+2. `Ctrl + Shift + P -> ESP-IDF: Build Your Project`
+3. `Ctrl + Shift + P -> ESP-IDF: Flash Your Project -> UART`
 
 #### A Note for Windows users (skip this if you use Linux)
 
@@ -37,12 +25,21 @@ If you are on Windows, flashing might show this error:
 A fatal error occurred: Could not connect to an Espressif device on any of the 1 available serial ports.
 ```
 
-If that happens, press and hold the BOOT button on your board as soon as
+If that happens, the next time you try, press and hold the BOOT button on your board as soon as
 you see `Connecting...`.
 
 #### A Note for Linux users (skip this if you use Windows)
 
-Before flashing, run this command, log out, and log back in (or reboot):
+You might get this error while flashing:
+
+```
+A fatal error occurred: Could not open /dev/ttyUSB0, the port is busy or doesn't exist.
+([Errno 13] could not open port /dev/ttyUSB0: [Errno 13] Permission denied: '/dev/ttyUSB0')
+
+Hint: Try to add user into dialout or uucp group.
+```
+
+If that happens, run this command, log out, log back in (or reboot), and try flashing again:
 
 ```bash
 sudo usermod -aG dialout $USER
@@ -50,19 +47,10 @@ sudo usermod -aG dialout $USER
 
 You have to do it only once.
 
-<!--
-In Linux, you should create a `/etc/udev/rules.d/99-esp32.rules` file, paste the following contents into the file, and restart the system before flashing. You have to do it only once per system.
+## Creating a new example
 
-```plaintext
-KERNEL=="ttyUSB*", MODE="0666"
-KERNEL=="ttyACM*", MODE="0666"
-```
--->
-
-## How do I create a new example?
-
-- From the command palette, select `ESP-IDF: New Project` and select the ESP-IDF version.
-- From the "ESP-IDF Templates" dropdown, select the `sample_project` template and click the create project button.
+- `Ctrl + Shift + P -> ESP-IDF: New Project -> <your_esp_idf_version>`
+- `ESP-IDF Templates -> sample_project -> Create Project (button)`
 - Fill in the details:
   - Project name: Your project name.
   - Project directory: Your project directory.
@@ -73,16 +61,23 @@ KERNEL=="ttyACM*", MODE="0666"
   - ESP-IDF component directory: Keep the input empty.
 - Create project.
 - Open project.
-- Generate compile commands if prompted.
-- Write your code and submit a pull request.
+- If you are prompted to generate `compile_commands.json`, accept it. If not, do `Ctrl + Shift + P -> ESP-IDF: Run idf.py reconfigure Task`, which does the same thing.
 
 ## Troubleshooting
 
-## Red squiggly lines under `#include "whatever"`
+### Red squiggly lines under `#include "something"`
 
-Try this VS Code command from the command palette:
+Try both. At least one of them will probably work.
 
-```
-ESP-IDF: Add VS Code Configuration Folder
-```
+- Option 1: `Ctrl + Shift + P -> ESP-IDF: Run idf.py reconfigure Task`
+- Option 2: `Ctrl + Shift + P -> Add VS Code Configuration Folder`
 
+### Reconfigure or build failure
+
+Delete the `build` directory and try again.
+
+## Tips
+
+### Using `idf.py`
+
+`Ctrl + Shift + P -> Open ESP-IDF Terminal`. You can use `idf.py` in this terminal (e.g., `idf.py reconfigure`).
