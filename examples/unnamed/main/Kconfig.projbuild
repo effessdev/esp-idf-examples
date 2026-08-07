@@ -1,0 +1,21 @@
+menu "WiFi Configuration"
+
+    config WIFI_SSID
+        string "WiFi SSID"
+        default "myssid"
+        help
+            SSID (network name) to connect to.
+
+    config WIFI_PASSWORD
+        string "WiFi Password"
+        default "mypassword"
+        help
+            WiFi password (WPA/WPA2).
+
+    config WIFI_MAX_RETRY
+        int "Maximum retry count"
+        default 10
+        help
+            Maximum number of connection retries before giving up.
+
+endmenu
