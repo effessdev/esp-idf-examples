@@ -15,7 +15,7 @@ This is a set of ESP-IDF examples to help you learn to program an ESP32.
 
 1. `Ctrl + Shift + P -> ESP-IDF: Run idf.py reconfigure Task`
 2. `Ctrl + Shift + P -> ESP-IDF: Build Your Project`
-3. `Ctrl + Shift + P -> ESP-IDF: Flash Your Project -> UART`
+3. `Ctrl + Shift + P -> ESP-IDF: Flash (UART) Your Project`
 
 #### A Note for Windows users (skip this if you use Linux)
 
@@ -26,7 +26,7 @@ A fatal error occurred: Could not connect to an Espressif device on any of the 1
 ```
 
 If that happens, the next time you try, press and hold the BOOT button on your board as soon as
-you see `Connecting...`.
+you see `Connecting...`. Only stop pressing after a few seconds.
 
 #### A Note for Linux users (skip this if you use Windows)
 
