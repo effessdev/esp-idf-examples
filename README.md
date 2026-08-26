@@ -62,6 +62,7 @@ You have to do it only once.
 - Create project.
 - Open project.
 - If you are prompted to generate `compile_commands.json`, accept it. If not, do `Ctrl + Shift + P -> ESP-IDF: Run idf.py reconfigure Task`, which does the same thing.
+- If you are using Clangd in VS Code or its forks, run `ESP-IDF: Configure project for ESP-Clang` from the VS Code command palette to make sure Clangd IntelliSense works correctly.
 
 ## Troubleshooting
 
