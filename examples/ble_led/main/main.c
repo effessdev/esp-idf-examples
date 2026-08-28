@@ -26,8 +26,8 @@
 #include "services/gatt/ble_svc_gatt.h"
 
 /* Defines */
-#define TAG "NimBLE_GATT_Server"
-#define DEVICE_NAME "NimBLE_GATT"
+#define TAG "NimBLE_LED"
+#define DEVICE_NAME "NimBLE_LED"
 
 static const ble_uuid16_t auto_io_svc_uuid = BLE_UUID16_INIT(0x1815);
 static const ble_uuid16_t led_chr_uuid = BLE_UUID16_INIT(0x2A56);
@@ -78,6 +78,42 @@ static int led_chr_access(uint16_t conn_handle, uint16_t attr_handle,
   return BLE_ATT_ERR_UNLIKELY;
 }
 
+static void gatt_svr_on_sync(void) {
+  struct ble_hs_adv_fields fields;
+  memset(&fields, 0, sizeof(fields));
+
+  // Make device discoverable and broadcast the name
+  fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP;
+  fields.name = (uint8_t *)DEVICE_NAME;
+  fields.name_len = strlen(DEVICE_NAME);
+  fields.name_is_complete = 1;
+
+  int rc = ble_gap_adv_set_fields(&fields);
+  if (rc != 0) {
+    ESP_LOGE(TAG, "failed to set advertising data, error code: %d", rc);
+    return;
+  }
+
+  // Configure advertising behavior
+  struct ble_gap_adv_params adv_params;
+  memset(&adv_params, 0, sizeof(adv_params));
+  adv_params.conn_mode = BLE_GAP_CONN_MODE_UND; // Undirected connectable
+  adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN; // General discoverable
+
+  rc = ble_gap_adv_start(BLE_OWN_ADDR_PUBLIC, NULL, BLE_HS_FOREVER, &adv_params,
+                         NULL, NULL);
+  if (rc != 0) {
+    ESP_LOGE(TAG, "failed to start advertising, error code: %d", rc);
+    return;
+  }
+  ESP_LOGI(TAG, "Advertising started successfully");
+}
+
+void nimble_host_task(void *param) {
+  nimble_port_run(); // Runs continuously to handle stack events
+  nimble_port_freertos_deinit();
+}
+
 void app_main(void) {
   esp_err_t ret; // To store the return code
 
@@ -91,6 +127,9 @@ void app_main(void) {
     ESP_LOGE(TAG, "failed to initialize nvs flash, error code: %d ", ret);
     return;
   }
+
+  gpio_reset_pin(GPIO_NUM_2);
+  gpio_set_direction(GPIO_NUM_2, GPIO_MODE_OUTPUT);
 
   ret = nimble_port_init();
   if (ret != ESP_OK) {
@@ -122,4 +161,8 @@ void app_main(void) {
     ESP_LOGE(TAG, "failed to add gatt services, error code: %d", rc);
     return;
   }
+
+  ble_hs_cfg.sync_cb = gatt_svr_on_sync;
+
+  nimble_port_freertos_init(nimble_host_task);
 }
