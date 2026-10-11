@@ -1,7 +1,0 @@
-include = ["AGENTS.md", "**/*.c"]
-exclude = []
-
-[[presets]]
-name = "all"
-include = ["**"]
-exclude = []
