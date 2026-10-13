@@ -2,10 +2,9 @@
 #include "driver/gpio.h"
 #include <stdbool.h>
 
-// Board LED is commonly wired to GPIO 2.
-#define LED_GPIO_NUM GPIO_NUM_2
+#define LED_GPIO_NUM GPIO_NUM_22
 
-// Keep hardware state internal to this module.
+// Keep hardware state internal to this file
 static bool s_led_on = false;
 
 void led_init(void) {
