@@ -1,3 +1,3 @@
 idf_component_register(SRCS "main.c" "led.c"
                     INCLUDE_DIRS "."
-                    PRIV_REQUIRES driver)
+                    PRIV_REQUIRES esp_driver_gpio)
