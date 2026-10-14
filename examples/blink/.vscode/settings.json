@@ -30,5 +30,6 @@
     "--background-index",
     "--query-driver=**",
     "--compile-commands-dir=c:\\Users\\fasee\\Temp\\repos\\esp-idf-examples\\examples\\hello_world\\build"
-  ]
+  ],
+  "idf.flashType": "UART"
 }
