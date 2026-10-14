@@ -12,19 +12,19 @@
 static int led_state = 0;
 static QueueHandle_t gpio_evt_queue = NULL;
 
-// ISR handler with raw-interrupt timestamp resetting
 static void IRAM_ATTR gpio_isr_handler(void* arg)
 {
     static int64_t last_interrupt_time = 0;
     int64_t current_time = esp_timer_get_time();
 
-    // Accept the interrupt only if enough time has passed since the LAST raw interrupt (bounce or press)
+    // Accept the interrupt only if enough time has passed since the LAST raw interrupt
     if (current_time - last_interrupt_time > DEBOUNCE_TIME_US) {
         uint32_t gpio_num = (uint32_t) arg;
+        
+        // Add event item to the queue
         xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
     }
 
-    // Update the timestamp on EVERY raw interrupt so bounces push out the window
     last_interrupt_time = current_time;
 }
 
