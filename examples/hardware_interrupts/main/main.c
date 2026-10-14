@@ -36,7 +36,7 @@ static void button_task(void* arg)
 
     for (;;) {
         if (xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
-            // Toggle LED state on valid debounced button press event
+            // Toggle LED state when the button is released
             led_state = !led_state;
             gpio_set_level(LED_PIN, led_state);
         }
@@ -49,11 +49,13 @@ void app_main(void)
     gpio_reset_pin(LED_PIN);
     gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);
 
-    // Configure Button Pin as Input with Pull-Up and Interrupt
+    // Configure Button Pin as Input with Pull-Up
     gpio_reset_pin(BUTTON_PIN);
     gpio_set_direction(BUTTON_PIN, GPIO_MODE_INPUT);
     gpio_pullup_en(BUTTON_PIN);
-    gpio_set_intr_type(BUTTON_PIN, GPIO_INTR_NEGEDGE);
+    
+    // Trigger on POSitive EDGE (Rising edge: when button is released and pin goes back HIGH)
+    gpio_set_intr_type(BUTTON_PIN, GPIO_INTR_POSEDGE);
 
     // Create Queue for Passing Events
     gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
