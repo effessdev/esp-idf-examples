@@ -5,25 +5,27 @@
 #include "driver/gpio.h"
 #include "esp_timer.h"
 
-#define LED_PIN         GPIO_NUM_22
-#define BUTTON_PIN      GPIO_NUM_23
-#define DEBOUNCE_TIME_US 200000 // 200 milliseconds debounce window
+#define LED_PIN          GPIO_NUM_22
+#define BUTTON_PIN       GPIO_NUM_23
+#define DEBOUNCE_TIME_US 50000 // 50 milliseconds debounce window
 
 static int led_state = 0;
 static QueueHandle_t gpio_evt_queue = NULL;
 
-// ISR handler with debounce and queue transmission
+// ISR handler with raw-interrupt timestamp resetting
 static void IRAM_ATTR gpio_isr_handler(void* arg)
 {
     static int64_t last_interrupt_time = 0;
     int64_t current_time = esp_timer_get_time();
 
-    // Discard interrupts coming too close together (chatter/bounce)
+    // Accept the interrupt only if enough time has passed since the LAST raw interrupt (bounce or press)
     if (current_time - last_interrupt_time > DEBOUNCE_TIME_US) {
-        last_interrupt_time = current_time;
         uint32_t gpio_num = (uint32_t) arg;
         xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
     }
+
+    // Update the timestamp on EVERY raw interrupt so bounces push out the window
+    last_interrupt_time = current_time;
 }
 
 // Background task to process button events safely
@@ -31,7 +33,6 @@ static void button_task(void* arg)
 {
     uint32_t io_num;
     for (;;) {
-        // Wait indefinitely until an event is received from the queue
         if (xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
             led_state = !led_state;
             gpio_set_level(LED_PIN, led_state);
@@ -63,6 +64,6 @@ void app_main(void)
     // Install GPIO ISR service
     gpio_install_isr_service(0);
 
-    // Attach the ISR handler to the button pin and pass the pin number as argument
+    // Attach the ISR handler to the button pin
     gpio_isr_handler_add(BUTTON_PIN, gpio_isr_handler, (void*) BUTTON_PIN);
 }
