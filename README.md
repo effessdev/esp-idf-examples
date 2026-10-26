@@ -1,12 +1,13 @@
 # ESP-IDF examples
 
+This is a set of ESP-IDF examples to help you learn to program an ESP32. You can see two folders:
+
+- [Examples](examples/): Each example is a separate ESP-IDF project.
+- [Single Project Examples](single-project-examples/): Multiple examples in a single project.
+
 ## Getting started
 
-Check out the following chapters from my [ESP-IDF Course](https://effessdev.github.io/esp-idf) to get started:
+Check out the following chapters from my [ESP-IDF Course](https://effessdev.github.io/esp-idf):
 
 - [Installation](https://effessdev.github.io/esp-idf/getting-started/install/)
 - [Your first project](https://effessdev.github.io/esp-idf/getting-started/first-project/)
-
-## Recommended learning order
-
-Not written yet.
