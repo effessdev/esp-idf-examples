@@ -1,6 +1,6 @@
-# ESP-IDF examples
+# ESP-IDF reference
 
-This is a set of ESP-IDF examples to help you learn to program an ESP32. You can see two folders:
+This is a set of ESP-IDF examples for reference, organized into two folders:
 
 - [Examples](examples/): Each example is a separate ESP-IDF project. For large examples.
 - [Single Project Examples](single-project-examples/): Multiple examples in a single project. For simple examples only.
