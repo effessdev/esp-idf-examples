@@ -7,12 +7,17 @@
 #include "gatt_svc.h"
 #include "common.h"
 #include "heart_rate.h"
+#include "host/ble_uuid.h"
+#include <stdint.h>
 
 /* Private function declarations */
 static int heart_rate_chr_access(uint16_t conn_handle, uint16_t attr_handle,
                                  struct ble_gatt_access_ctxt *ctxt, void *arg);
 static int led_chr_access(uint16_t conn_handle, uint16_t attr_handle,
                           struct ble_gatt_access_ctxt *ctxt, void *arg);
+static int effessdev_log_chr_access(uint16_t conn_handle, uint16_t attr_handle,
+                                    struct ble_gatt_access_ctxt *ctxt,
+                                    void *arg);
 
 /* Private variables */
 /* Heart rate service */
@@ -32,6 +37,13 @@ static uint16_t led_chr_val_handle;
 static const ble_uuid128_t led_chr_uuid =
     BLE_UUID128_INIT(0x23, 0xd1, 0xbc, 0xea, 0x5f, 0x78, 0x23, 0x15, 0xde, 0xef,
                      0x12, 0x12, 0x25, 0x15, 0x00, 0x00);
+
+/* EffessDev service */
+static const ble_uuid16_t effessdev_svc_uuid = BLE_UUID16_INIT(0x180A);
+static uint16_t effessdev_log_chr_val_handle;
+static const ble_uuid128_t effessdev_log_chr_uuid =
+    BLE_UUID128_INIT(0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+                     0x01, 0x01, 0x01, 0x01, 0x01, 0x01);
 
 /* GATT services table */
 static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
@@ -61,7 +73,19 @@ static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
                                          .val_handle = &led_chr_val_handle},
                                         {0}},
     },
-
+    /* EffessDev service */
+    {
+        .type = BLE_GATT_SVC_TYPE_PRIMARY,
+        .uuid = &effessdev_svc_uuid.u,
+        .characteristics =
+            (struct ble_gatt_chr_def[]){
+                /* EffessDev log characteristic */
+                {.uuid = &effessdev_log_chr_uuid.u,
+                 .access_cb = effessdev_log_chr_access,
+                 .flags = BLE_GATT_CHR_F_WRITE,
+                 .val_handle = &effessdev_log_chr_val_handle},
+                {0}},
+    },
     {
         0, /* No more services. */
     },
@@ -137,6 +161,52 @@ static int led_chr_access(uint16_t conn_handle, uint16_t attr_handle,
           ESP_LOGI(TAG, "led turned on! (but it didn't because I removed it)");
         } else {
           ESP_LOGI(TAG, "led turned off! (but it didn't because I removed it)");
+        }
+      } else {
+        goto error;
+      }
+      return 0;
+    }
+    goto error;
+
+  /* Unknown event */
+  default:
+    goto error;
+  }
+
+error:
+  ESP_LOGE(TAG, "unexpected access operation to led characteristic, opcode: %d",
+           ctxt->op);
+  return BLE_ATT_ERR_UNLIKELY;
+}
+
+static int effessdev_log_chr_access(uint16_t conn_handle, uint16_t attr_handle,
+                                    struct ble_gatt_access_ctxt *ctxt,
+                                    void *arg) {
+  /* Handle access events */
+  /* Note: LED characteristic is write only */
+  switch (ctxt->op) {
+
+  /* Write characteristic event */
+  case BLE_GATT_ACCESS_OP_WRITE_CHR:
+    /* Verify connection handle */
+    if (conn_handle != BLE_HS_CONN_HANDLE_NONE) {
+      ESP_LOGI(TAG, "characteristic write; conn_handle=%d attr_handle=%d",
+               conn_handle, attr_handle);
+    } else {
+      ESP_LOGI(TAG, "characteristic write by nimble stack; attr_handle=%d",
+               attr_handle);
+    }
+
+    /* Verify attribute handle */
+    if (attr_handle == effessdev_log_chr_val_handle) {
+      /* Verify access buffer length */
+      if (ctxt->om->om_len == 1) {
+        /* Turn the LED on or off according to the operation bit */
+        if (ctxt->om->om_data[0]) {
+          ESP_LOGI(TAG, "effessdev (on)");
+        } else {
+          ESP_LOGI(TAG, "effessdev (off)");
         }
       } else {
         goto error;
